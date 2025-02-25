@@ -33,6 +33,17 @@ public class Loan {
     public void setStatus(String status) { this.status = status; }
 
     @Override
+    public String toString() {
+        return "Loan{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", amount='" + amount + '\'' +
+                ", interest='" + interest + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;

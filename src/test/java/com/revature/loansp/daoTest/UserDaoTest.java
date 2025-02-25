@@ -45,7 +45,7 @@ public class UserDaoTest {
         user.setUsername("jessgam");
         user.setPasswordHash("HASHED_password2");
         user.setRole("regular");
-        User expectedUser = new User(3, "jessgam", "HASHED_password2", "regular");
+        User expectedUser = new User(4, "jessgam", "HASHED_password2", "regular");
         // Act
         userDao.createUser(user);
         // Assert

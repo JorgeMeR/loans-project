@@ -19,13 +19,14 @@ public class LoanDao {
 
 
     public Loan createLoan(Loan newLoan) {
-        String sql = "INSERT INTO loans (user_id, amount) VALUES (?, ?)";
+        String sql = "INSERT INTO loans (user_id, amount, interest) VALUES (?, ?, ?)";
 
         try(Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 
                 stmt.setInt(1, newLoan.getUserId());
                 stmt.setInt(2, newLoan.getAmount());
+                stmt.setFloat(3, newLoan.getInterest());
 
                 stmt.executeUpdate();
 
@@ -33,7 +34,8 @@ public class LoanDao {
                     if(generatedKey.next()) {
                         int newId = generatedKey.getInt(1);
                         newLoan.setId(newId);
-                        // Check with the database if the status can be get
+                        // A select query can be done here to recover the default value.
+                        // Since we know the default we can assign it like this
                         newLoan.setStatus("pending");
                     }
                 }
