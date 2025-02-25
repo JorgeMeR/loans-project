@@ -24,7 +24,11 @@ public class UserDaoTest {
     // Check that we can get correctly the user
     @Test
     public void getUserByNameTest(){
-        User user = userDao.getUserByName("jorgemer");
+        // Arrange
+        String username = "jorgemer";
+        // Act
+        User user = userDao.getUserByName(username);
+        // Assert
         if(user == null) {
             Assert.fail();
         } else {
@@ -36,21 +40,27 @@ public class UserDaoTest {
     // Adding a new user
     @Test
     public void createUserTest() {
+        // Arrange
         User user = new User();
         user.setUsername("jessgam");
         user.setPasswordHash("HASHED_password2");
         user.setRole("regular");
+        User expectedUser = new User(4, "jessgam", "HASHED_password2", "regular");
+        // Act
         userDao.createUser(user);
-        User expectedUser = new User(3, "jessgam", "HASHED_password2", "regular");
+        // Assert
         Assert.assertTrue(user.equals(expectedUser));
     }
 
     // Updating an user
     @Test
     public void updateUserTest() {
+        // Arrange
         User user = new User(2,"richimer", "HASHED_password3", "manager");
+        // Act
         userDao.updateUser(user);
         User updatedUser = userDao.getUserByName("richimer");
+        // Assert
         Assert.assertTrue(user.equals(updatedUser));
     }
 }

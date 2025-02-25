@@ -26,6 +26,7 @@ public class Main {
             id SERIAL PRIMARY KEY,
             user_id INT NOT NULL,
             amount INT NOT NULL,
+            interest REAL NOT NULL,
             status VARCHAR(50) DEFAULT 'pending',
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
             );
@@ -36,12 +37,15 @@ public class Main {
             INSERT INTO users (username, password_hash, role)
             VALUES 
                 ('admin', 'HASHED_admin', 'manager'),
-                ('jorgemer', 'HASHED_password', 'regular');
+                ('jorgemer', 'HASHED_password', 'regular'),
+                ('champs', 'HASHED_password4', 'regular');
 
             -- Insert sample loan
-            INSERT INTO loans (user_id, amount)
+            INSERT INTO loans (user_id, amount, interest)
             VALUES 
-                (2, '1000')
+                (2, 1000, 7.5),
+                (2, 3000, 4.3),
+                (3, 4000, 8.2);
             """;
 
     
