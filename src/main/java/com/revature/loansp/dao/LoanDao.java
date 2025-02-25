@@ -58,7 +58,8 @@ public class LoanDao {
                                 res.getInt(1),
                                 res.getInt(2),
                                 res.getInt(3),
-                                res.getString(4)
+                                res.getFloat(4),
+                                res.getString(5)
                                 ));
                 }
         } catch (SQLException e) {
@@ -81,7 +82,8 @@ public class LoanDao {
                                 res.getInt(1),
                                 res.getInt(2),
                                 res.getInt(3),
-                                res.getString(4)
+                                res.getFloat(4),
+                                res.getString(5)
                                 );
                     return loan;
                 }
@@ -107,7 +109,8 @@ public class LoanDao {
                                 res.getInt(1),
                                 res.getInt(2),
                                 res.getInt(3),
-                                res.getString(4)
+                                res.getFloat(4),
+                                res.getString(5)
                     ));
                 }
         } catch(SQLException e) {
@@ -117,12 +120,13 @@ public class LoanDao {
     }
 
     public void updateLoan(Loan loan) {
-        String sql = "UPDATE loans SET amount = ? WHERE id = ?";
+        String sql = "UPDATE loans SET amount = ?, interest = ? WHERE id = ?";
 
         try(Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
             PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, loan.getAmount());
-                stmt.setInt(2, loan.getId());
+                stmt.setFloat(2, loan.getInterest());
+                stmt.setInt(3, loan.getId());
 
                 stmt. executeUpdate();
 
@@ -132,12 +136,11 @@ public class LoanDao {
     }
 
     public void approveLoan(int loanId) {
-        String sql = "UPDATE loans SET status = ? WHERE id = ?";
+        String sql = "UPDATE loans SET status = 'approved' WHERE id = ?";
 
         try(Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
             PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, "approved");
-                stmt.setInt(2, loanId);
+                stmt.setInt(1, loanId);
 
                 stmt. executeUpdate();
 
@@ -148,12 +151,11 @@ public class LoanDao {
 
 
     public void rejectLoan(int loanId) {
-        String sql = "UPDATE loans SET status = ? WHERE id = ?";
+        String sql = "UPDATE loans SET status = 'rejected' WHERE id = ?";
 
         try(Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
             PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, "rejected");
-                stmt.setInt(2, loanId);
+                stmt.setInt(1, loanId);
 
                 stmt. executeUpdate();
 

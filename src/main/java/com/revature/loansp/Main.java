@@ -26,6 +26,7 @@ public class Main {
             id SERIAL PRIMARY KEY,
             user_id INT NOT NULL,
             amount INT NOT NULL,
+            interest REAL NOT NULL,
             status VARCHAR(50) DEFAULT 'pending',
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
             );
@@ -39,9 +40,9 @@ public class Main {
                 ('jorgemer', 'HASHED_password', 'regular');
 
             -- Insert sample loan
-            INSERT INTO loans (user_id, amount)
+            INSERT INTO loans (user_id, amount, interest)
             VALUES 
-                (2, '1000')
+                (2, '1000', 7.5)
             """;
 
     
