@@ -4,9 +4,12 @@ import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import io.javalin.Javalin;
 
-import com.revature.loansp.dao.LoanDao;
+import com.revature.loansp.controller.UserController;
+//import com.revature.loansp.dao.LoanDao;
 import com.revature.loansp.dao.UserDao;
+import com.revature.loansp.service.UserService;
 
 public class Main {
     private static final String DROP_TABLES_SQL = """
@@ -55,6 +58,21 @@ public class Main {
         String dbPassword = "password";
 
         resetDB(jdbcUrl, dbUser, dbPassword);
+
+        UserDao userDao = new UserDao(jdbcUrl, dbUser, dbPassword);
+        //LoanDao loanDao = new LoanDao(jdbcUrl, dbUser, dbPassword);
+
+        UserService userService = new UserService(userDao);
+
+        UserController userController = new UserController(userService);
+
+
+        Javalin app = Javalin.create(config -> {}).start(7000);
+
+        app.post("/register", userController::register);
+        app.post("/login", userController::login);
+
+        System.out.println("Server running on http://localhost:7000/");
 
     }
 
