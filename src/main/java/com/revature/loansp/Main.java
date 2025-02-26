@@ -78,10 +78,12 @@ public class Main {
 
         Javalin app = Javalin.create(config -> {}).start(7000);
 
-        app.post("/register", userController::register);
-        app.post("/login", userController::login);
-        app.post("/logout", userController::logout);
-        app.post("/check", userController::checkLogin);
+        app.post("/auth/register", userController::register);
+        app.post("/auth/login", userController::login);
+        app.post("/auth/logout", userController::logout);
+        app.post("/auth/check", userController::checkLogin);
+
+        app.get("/users/{id}", userController::getUser);
 
         System.out.println("Server running on http://localhost:7000/");
 

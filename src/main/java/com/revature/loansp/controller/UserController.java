@@ -1,5 +1,7 @@
 package com.revature.loansp.controller;
 
+import java.util.List;
+
 import com.revature.loansp.dto.UserDto;
 import com.revature.loansp.model.User;
 import com.revature.loansp.service.UserService;
@@ -83,5 +85,28 @@ public class UserController {
             session.invalidate();
         }
         ctx.status(200).json("{\"message\":\"Logged out\"}");
+    }
+
+    public void getUser(Context ctx) {
+        HttpSession session = ctx.req().getSession(false);
+        if(session == null || session.getAttribute("user") == null) {
+            ctx.status(200).json("{\"message\":\"You are logged out\"}");
+            return;
+        }
+        User activeUser = (User) session.getAttribute("user");
+        int userIdRequested = Integer.parseInt(ctx.pathParam("id"));
+        User userRequested = userService.getUserById(userIdRequested);
+        if(activeUser.getRole().equals("manager")) {
+            ctx.json(userRequested);
+            return;
+        } else if (activeUser.getId() == userIdRequested) {
+            ctx.json(userRequested);
+            return;
+        } else {
+            ctx.status(401).json("{\"error\":\"You don't have the right privileges.\"}");
+            return;
+        }
+
+
     }
 }

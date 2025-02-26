@@ -67,6 +67,30 @@ public class UserDao {
     }
 
 
+    public User getUserById(int id){
+        String sql = "SELECT * FROM users WHERE id = ?";
+
+        try(Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+                stmt.setInt(1, id);
+
+                try(ResultSet res = stmt.executeQuery()){
+                    if(res.next()){
+                        return new User(res.getInt(1),
+                                        res.getString(2),
+                                        res.getString(3),
+                                        res.getString(4)
+                                        );
+                    }
+                }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public void updateUser(User user){
         String sql = "UPDATE users SET username = ?, password_hash = ?, role = ? WHERE id = ?";
 

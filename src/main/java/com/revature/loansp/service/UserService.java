@@ -38,4 +38,8 @@ public class UserService {
         }
         return existingUser;
     }
+
+    public User getUserById(int userId) {
+        return userDao.getUserById(userId);
+    }
 }
