@@ -42,4 +42,10 @@ public class UserService {
     public User getUserById(int userId) {
         return userDao.getUserById(userId);
     }
+
+    public User updateUser(int id, User user) {
+        user.setId(id);
+        userDao.updateUser(user);
+        return userDao.getUserById(user.getId());
+    }
 }

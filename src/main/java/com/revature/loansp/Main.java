@@ -84,6 +84,7 @@ public class Main {
         app.post("/auth/check", userController::checkLogin);
 
         app.get("/users/{id}", userController::getUser);
+        app.put("/users/{id}", userController::updateUser);
 
         System.out.println("Server running on http://localhost:7000/");
 
