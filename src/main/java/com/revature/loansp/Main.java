@@ -1,6 +1,9 @@
 package com.revature.loansp;
 
 import java.sql.Statement;
+
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,6 +13,9 @@ import com.revature.loansp.controller.UserController;
 //import com.revature.loansp.dao.LoanDao;
 import com.revature.loansp.dao.UserDao;
 import com.revature.loansp.service.UserService;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 
 public class Main {
     private static final String DROP_TABLES_SQL = """
@@ -53,6 +59,9 @@ public class Main {
 
     
     public static void main(String[] args) {
+
+        ((Logger) LoggerFactory.getLogger("io.javalin")).setLevel(Level.INFO);         
+        ((Logger) LoggerFactory.getLogger("org.eclipse.jetty")).setLevel(Level.INFO);
         String jdbcUrl = "jdbc:postgresql://localhost:5432/loans_db";
         String dbUser = "postgres";
         String dbPassword = "password";
@@ -71,6 +80,8 @@ public class Main {
 
         app.post("/register", userController::register);
         app.post("/login", userController::login);
+        app.post("/logout", userController::logout);
+        app.post("/check", userController::checkLogin);
 
         System.out.println("Server running on http://localhost:7000/");
 

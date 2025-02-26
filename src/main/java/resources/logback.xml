@@ -23,6 +23,6 @@
     </root>
     
     <!-- Set specific log levels for packages -->
-    <logger name="io.javalin" level="WARN" />
+    <!-- <logger name="io.javalin" level="WARN" /> -->
     <!-- <logger name="your.package.name" level="DEBUG" /> -->
 </configuration>
