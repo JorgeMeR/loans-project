@@ -31,7 +31,8 @@ public class UserService {
         if(existingUser == null) {
             return null;
         }
-
+        
+        // TODO: Implement the hashing with bcrypt
         String hashedPassword = "HASHED_" + rawPassword;
         if(!hashedPassword.equals(existingUser.getPasswordHash())){
             return null;
@@ -45,7 +46,15 @@ public class UserService {
 
     public User updateUser(int id, User user) {
         user.setId(id);
-        userDao.updateUser(user);
-        return userDao.getUserById(user.getId());
+        if(user.getPasswordHash() != null){
+            // TODO: Implement the hashing with bcrypt
+            String hashedPassword = "HASHED_" + user.getPasswordHash();
+            user.setPasswordHash(hashedPassword);
+        }
+        boolean isUserUpdated = userDao.updateUser(user);
+        if(isUserUpdated) {
+            return userDao.getUserById(user.getId());
+        }
+        return null;
     }
 }

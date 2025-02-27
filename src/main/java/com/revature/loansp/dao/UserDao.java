@@ -91,21 +91,23 @@ public class UserDao {
     }
 
 
-    public void updateUser(User user){
+    public boolean updateUser(User user){
         String sql = "UPDATE users SET username = ?, password_hash = ?, role = ? WHERE id = ?";
-
+        boolean success;
         try(Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
             PreparedStatement stmt = conn.prepareStatement(sql)){
                 stmt.setString(1, user.getUsername());
                 stmt.setString(2, user.getPasswordHash());
                 stmt.setString(3, user.getRole());
                 stmt.setInt(4, user.getId());
-
+                
                 stmt.executeUpdate();
-
+                success = true;
+        
         }catch(SQLException e){
+            success = false;
             e.printStackTrace();
         }
-
+        return success;
     }
 }

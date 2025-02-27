@@ -159,6 +159,10 @@ public class UserController {
         // If not, returns error and a message.
         if(activeUser.getRole().equals("manager") || activeUser.getId() == userIdInPath) {
             userInPath = userService.updateUser(userIdInPath, userInRequest);
+            if (userInPath == null) {
+                ctx.status(401).json("{\"error\":\"The username already exists.\"}");
+                return;
+            }
             ctx.json(userInPath);
             return;
         }
