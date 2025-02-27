@@ -11,11 +11,11 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public User registerUser(String username, String rawPassword, String role) {
+    public boolean registerUser(String username, String rawPassword, String role) {
         String hashedPassword = "HASHED_" + rawPassword;
 
         if(userDao.getUserByName(username) != null) {
-            return null;
+            return false;
         }
 
         User newUser = new User();
@@ -23,6 +23,38 @@ public class UserService {
         newUser.setPasswordHash(hashedPassword);
         newUser.setRole(role);
         userDao.createUser(newUser);
-        return newUser;
+        return true;
+    }
+
+    public User loginUser(String username, String rawPassword) {
+        User existingUser = userDao.getUserByName(username);
+        if(existingUser == null) {
+            return null;
+        }
+        
+        // TODO: Implement the hashing with bcrypt
+        String hashedPassword = "HASHED_" + rawPassword;
+        if(!hashedPassword.equals(existingUser.getPasswordHash())){
+            return null;
+        }
+        return existingUser;
+    }
+
+    public User getUserById(int userId) {
+        return userDao.getUserById(userId);
+    }
+
+    public User updateUser(int id, User user) {
+        user.setId(id);
+        if(user.getPasswordHash() != null){
+            // TODO: Implement the hashing with bcrypt
+            String hashedPassword = "HASHED_" + user.getPasswordHash();
+            user.setPasswordHash(hashedPassword);
+        }
+        boolean isUserUpdated = userDao.updateUser(user);
+        if(isUserUpdated) {
+            return userDao.getUserById(user.getId());
+        }
+        return null;
     }
 }
