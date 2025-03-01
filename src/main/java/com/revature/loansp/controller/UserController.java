@@ -1,7 +1,5 @@
 package com.revature.loansp.controller;
 
-import java.util.List;
-
 import com.revature.loansp.dto.UserDto;
 import com.revature.loansp.model.User;
 import com.revature.loansp.service.UserService;
@@ -132,33 +130,33 @@ public class UserController {
         }
 
         // Get from the body the user to register
-        UserDto userDto = ctx.bodyAsClass(UserDto.class);
-        // Make the casting
-        User userInRequest = new User(userDto.getId(), userDto.getUsername(), userDto.getPassword(), userDto.getRole());
+        UserDto userInBody = ctx.bodyAsClass(UserDto.class);
         // Check if we have the required fields
-        if(userInRequest.getUsername() == null 
-            || userInRequest.getPasswordHash() == null 
-            || userInRequest.getRole() == null) {
+        if(userInBody.getUsername() == null 
+            || userInBody.getPassword() == null 
+            || userInBody.getRole() == null) {
             ctx.status(400).json("{\"error\":\"Missing username, password or role.\"}");
+            return;
+        }
+        
+        // Gets the id passed in the path request
+        int userIdInPath = Integer.parseInt(ctx.pathParam("id"));
+        // Gets the user from the DB with the key passed in the path
+        // and check that it exists.
+        User userInPath = userService.getUserById(userIdInPath);
+        if(userInPath == null) {
+            ctx.status(401).json("{\"error\":\"The user that you are trying to modify doesn't exists.\"}");
             return;
         }
 
         // Gets the activeUser from the session
         User activeUser = (User) session.getAttribute("user");
-        // Gets the id passed in the path request
-        int userIdInPath = Integer.parseInt(ctx.pathParam("id"));
-        // Gets the user from the DB
-        User userInPath = userService.getUserById(userIdInPath);
-
-        if(userInPath == null) {
-            ctx.status(401).json("{\"error\":\"The user that you are trying to modify doesnt exists.\"}");
-            return;
-        }
         // If the user has a manager role from the session or is the same user
         // it returs the info from the user.
         // If not, returns error and a message.
         if(activeUser.getRole().equals("manager") || activeUser.getId() == userIdInPath) {
-            userInPath = userService.updateUser(userIdInPath, userInRequest);
+            userInPath = userService.updateUser(userIdInPath, userInBody);
+            // Message if the update was not successful
             if (userInPath == null) {
                 ctx.status(401).json("{\"error\":\"The username already exists.\"}");
                 return;

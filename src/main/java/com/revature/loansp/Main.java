@@ -9,10 +9,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import io.javalin.Javalin;
 
-import com.revature.loansp.controller.UserController;
-//import com.revature.loansp.dao.LoanDao;
+import com.revature.loansp.dao.LoanDao;
 import com.revature.loansp.dao.UserDao;
 import com.revature.loansp.service.UserService;
+import com.revature.loansp.service.LoanService;
+import com.revature.loansp.controller.UserController;
+import com.revature.loansp.controller.LoanController;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -69,11 +71,13 @@ public class Main {
         resetDB(jdbcUrl, dbUser, dbPassword);
 
         UserDao userDao = new UserDao(jdbcUrl, dbUser, dbPassword);
-        //LoanDao loanDao = new LoanDao(jdbcUrl, dbUser, dbPassword);
+        LoanDao loanDao = new LoanDao(jdbcUrl, dbUser, dbPassword);
 
         UserService userService = new UserService(userDao);
+        LoanService loanService = new LoanService(loanDao);
 
         UserController userController = new UserController(userService);
+        LoanController loanController = new LoanController(loanService);
 
 
         Javalin app = Javalin.create(config -> {}).start(7000);
@@ -85,6 +89,8 @@ public class Main {
 
         app.get("/users/{id}", userController::getUser);
         app.put("/users/{id}", userController::updateUser);
+
+        app.get("/loans", loanController::getLoans);
 
         System.out.println("Server running on http://localhost:7000/");
 

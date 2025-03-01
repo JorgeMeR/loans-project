@@ -2,6 +2,7 @@ package com.revature.loansp.service;
 
 import com.revature.loansp.model.User;
 import com.revature.loansp.dao.UserDao;
+import com.revature.loansp.dto.UserDto;
 
 public class UserService {
     
@@ -44,7 +45,9 @@ public class UserService {
         return userDao.getUserById(userId);
     }
 
-    public User updateUser(int id, User user) {
+    public User updateUser(int id, UserDto userDto) {
+        // Make the casting
+        User user = new User(userDto.getId(), userDto.getUsername(), userDto.getPassword(), userDto.getRole());
         user.setId(id);
         if(user.getPasswordHash() != null){
             // TODO: Implement the hashing with bcrypt
