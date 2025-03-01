@@ -41,6 +41,7 @@ public class LoanDao {
                 }
         } catch(SQLException e){
             e.printStackTrace();
+            return null;
         }
         return newLoan;
     }
@@ -121,9 +122,9 @@ public class LoanDao {
         return loans;
     }
 
-    public void updateLoan(Loan loan) {
+    public boolean updateLoan(Loan loan) {
         String sql = "UPDATE loans SET amount = ?, interest = ? WHERE id = ?";
-
+        boolean success;
         try(Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
             PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, loan.getAmount());
@@ -131,39 +132,46 @@ public class LoanDao {
                 stmt.setInt(3, loan.getId());
 
                 stmt. executeUpdate();
+                success = true;
 
         } catch (SQLException e) {
+            success = false;
             e.printStackTrace();
         }
+        return success;
     }
 
-    public void approveLoan(int loanId) {
+    public boolean approveLoan(int loanId) {
         String sql = "UPDATE loans SET status = 'approved' WHERE id = ?";
-
+        boolean success;
         try(Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
             PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, loanId);
 
                 stmt. executeUpdate();
-
+                success = true;
         } catch (SQLException e) {
+            success = false;
             e.printStackTrace();
         }
+        return success;
     }
 
 
-    public void rejectLoan(int loanId) {
+    public boolean rejectLoan(int loanId) {
         String sql = "UPDATE loans SET status = 'rejected' WHERE id = ?";
-
+        boolean success;
         try(Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
             PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, loanId);
 
                 stmt. executeUpdate();
-
+                success = true;
         } catch (SQLException e) {
+            success = false;
             e.printStackTrace();
         }
+        return success;
     }
 
 }

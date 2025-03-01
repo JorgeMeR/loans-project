@@ -91,6 +91,11 @@ public class Main {
         app.put("/users/{id}", userController::updateUser);
 
         app.get("/loans", loanController::getLoans);
+        app.post("/loans", loanController::createLoan);
+        app.get("/loans/{id}", loanController::viewLoan);
+        app.put("/loans/{id}", loanController::updateLoan);
+        app.put("/loans/{id}/approve", loanController::approveLoan);
+        app.put("/loans/{id}/reject", loanController::rejectLoan);
 
         System.out.println("Server running on http://localhost:7000/");
 
