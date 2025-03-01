@@ -3,11 +3,14 @@ package com.revature.loansp.dao;
 import com.revature.loansp.model.User;
 
 import java.sql.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UserDao {
     private final String url;
     private final String dbUser;
     private final String dbPassword;
+    private final Logger logger = LoggerFactory.getLogger(UserDao.class);
     
 
     public UserDao(String url, String dbUser, String dbPassword) {
@@ -34,9 +37,11 @@ public class UserDao {
                         int newId = generatedKey.getInt(1);
                         newUser.setId(newId);
                     }
+                    logger.info("New user created.");
                 }
 
         }catch (SQLException e){
+            logger.error("Exception trying to insert user", e);
             e.printStackTrace();
         }
         return newUser;
@@ -53,6 +58,7 @@ public class UserDao {
 
                 try(ResultSet res = stmt.executeQuery()){
                     if(res.next()){
+                        logger.debug(username + " info queried.");
                         return new User(res.getInt(1),
                                         res.getString(2),
                                         res.getString(3),
@@ -61,6 +67,7 @@ public class UserDao {
                     }
                 }
         }catch(SQLException e){
+            logger.error("Exception trying to get user", e);
             e.printStackTrace();
         }
         return null;
@@ -77,6 +84,7 @@ public class UserDao {
 
                 try(ResultSet res = stmt.executeQuery()){
                     if(res.next()){
+                        logger.debug( "User id " + id + " info queried.");
                         return new User(res.getInt(1),
                                         res.getString(2),
                                         res.getString(3),
@@ -85,6 +93,7 @@ public class UserDao {
                     }
                 }
         }catch(SQLException e){
+            logger.error("Exception trying to get user", e);
             e.printStackTrace();
         }
         return null;
@@ -103,9 +112,11 @@ public class UserDao {
                 
                 stmt.executeUpdate();
                 success = true;
+                logger.debug("User updated.");
         
         }catch(SQLException e){
             success = false;
+            logger.error("Exception trying to update user", e);
             e.printStackTrace();
         }
         return success;

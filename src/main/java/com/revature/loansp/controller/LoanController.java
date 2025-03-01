@@ -1,9 +1,10 @@
 package com.revature.loansp.controller;
 
-import com.revature.loansp.model.User;
-
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.revature.loansp.model.User;
 import com.revature.loansp.model.Loan;
 import com.revature.loansp.service.LoanService;
 
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 public class LoanController {
     
     private final LoanService loanService;
+    private final Logger logger = LoggerFactory.getLogger(LoanController.class);
     
     public LoanController(LoanService loanService) {
         this.loanService = loanService;
@@ -79,6 +81,7 @@ public class LoanController {
             ctx.json(loanRequested);
             return;
         } else {
+            logger.warn("Unauthorized access attempt.");
             ctx.status(403).json("{\"error\":\"You don't have the right privileges.\"}");
             return;
         }
@@ -119,6 +122,7 @@ public class LoanController {
             ctx.json(loanUpdated);
             return;
         } else {
+            logger.warn("Unauthorized access attempt.");
             ctx.status(403).json("{\"error\":\"You don't have the right privileges.\"}");
             return;
         }
@@ -151,6 +155,7 @@ public class LoanController {
             ctx.json(loanApproved);
             return;
         } else {
+            logger.warn("Unauthorized access attempt.");
             ctx.status(403).json("{\"error\":\"You don't have the right privileges.\"}");
             return;
         }
@@ -182,6 +187,7 @@ public class LoanController {
             ctx.json(loanRejected);
             return;
         } else {
+            logger.warn("Unauthorized access attempt.");
             ctx.status(403).json("{\"error\":\"You don't have the right privileges.\"}");
             return;
         }

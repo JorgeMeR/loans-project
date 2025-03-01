@@ -1,5 +1,8 @@
 package com.revature.loansp.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.revature.loansp.dto.UserDto;
 import com.revature.loansp.model.User;
 import com.revature.loansp.service.UserService;
@@ -10,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 public class UserController {
     
     private final UserService userService;
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -65,6 +69,7 @@ public class UserController {
 
         } else {
             // If it's empty, retunrs the following message.
+            logger.warn("Login attempt failed due to invalid credentials.");
             ctx.status(401).json("{\"error\":\"Invalid credentials\"}");
         }
     }
@@ -114,6 +119,7 @@ public class UserController {
             ctx.json(userRequested);
             return;
         } else {
+            logger.warn("Unauthorized access attempt.");
             ctx.status(401).json("{\"error\":\"You don't have the right privileges.\"}");
             return;
         }
@@ -164,6 +170,7 @@ public class UserController {
             ctx.json(userInPath);
             return;
         }
+        logger.warn("Unauthorized access attempt.");
         ctx.status(401).json("{\"error\":\"You don't have the right privileges.\"}");
         return;
     }
