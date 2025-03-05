@@ -4,6 +4,8 @@ import com.revature.loansp.model.User;
 import com.revature.loansp.dao.UserDao;
 import com.revature.loansp.dto.UserDto;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class UserService {
     
     private final UserDao userDao;
@@ -13,7 +15,7 @@ public class UserService {
     }
 
     public boolean registerUser(String username, String rawPassword, String role) {
-        String hashedPassword = "HASHED_" + rawPassword;
+        String hashedPassword = BCrypt.hashpw(rawPassword, BCrypt.gensalt(4));
 
         if(userDao.getUserByName(username) != null) {
             return false;
@@ -33,9 +35,7 @@ public class UserService {
             return null;
         }
         
-        // TODO: Implement the hashing with bcrypt
-        String hashedPassword = "HASHED_" + rawPassword;
-        if(!hashedPassword.equals(existingUser.getPasswordHash())){
+        if(!BCrypt.checkpw(rawPassword, existingUser.getPasswordHash())){
             return null;
         }
         return existingUser;
@@ -50,8 +50,7 @@ public class UserService {
         User user = new User(userDto.getId(), userDto.getUsername(), userDto.getPassword(), userDto.getRole());
         user.setId(id);
         if(user.getPasswordHash() != null){
-            // TODO: Implement the hashing with bcrypt
-            String hashedPassword = "HASHED_" + user.getPasswordHash();
+            String hashedPassword = BCrypt.hashpw(user.getPasswordHash(), BCrypt.gensalt(4));
             user.setPasswordHash(hashedPassword);
         }
         boolean isUserUpdated = userDao.updateUser(user);

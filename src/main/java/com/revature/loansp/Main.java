@@ -47,9 +47,9 @@ public class Main {
             -- Insert admin user and regular user
             INSERT INTO users (username, password_hash, role)
             VALUES 
-                ('admin', 'HASHED_admin', 'manager'),
-                ('jorgemer', 'HASHED_password', 'regular'),
-                ('champs', 'HASHED_password4', 'regular');
+                ('admin', '$2a$04$6EKj/wnPLYsVYfXXlinSwupaHkaKPCyMKKM7yvsjRn/vEuRrev.l.', 'manager'),
+                ('jorgemer', '$2a$04$i7KbX/I1IyPp/M4d/TToAeat/pb6NyhFzLMJML0uWcvi9cjw1NAUO', 'regular'),
+                ('champs', '$2a$04$FWD2j2P9XTwrnVLVPKFr9Oo09V6Cf6p63CPuHDE9uuEUIBrtsH8yG', 'regular');
 
             -- Insert sample loan
             INSERT INTO loans (user_id, amount, interest)
@@ -91,6 +91,11 @@ public class Main {
         app.put("/users/{id}", userController::updateUser);
 
         app.get("/loans", loanController::getLoans);
+        app.post("/loans", loanController::createLoan);
+        app.get("/loans/{id}", loanController::viewLoan);
+        app.put("/loans/{id}", loanController::updateLoan);
+        app.put("/loans/{id}/approve", loanController::approveLoan);
+        app.put("/loans/{id}/reject", loanController::rejectLoan);
 
         System.out.println("Server running on http://localhost:7000/");
 
