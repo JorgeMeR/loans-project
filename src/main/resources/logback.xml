@@ -1,7 +1,7 @@
 <configuration>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} ------ %msg%n</pattern>
         </encoder>
     </appender>
     
@@ -23,6 +23,8 @@
     </root>
     
     <!-- Set specific log levels for packages -->
-    <!-- <logger name="io.javalin" level="WARN" /> -->
+    <logger name="io.javalin" level="INFO" />
+    <logger name="org.eclipse.jetty" level="INFO" />
+    
     <!-- <logger name="your.package.name" level="DEBUG" /> -->
 </configuration>
